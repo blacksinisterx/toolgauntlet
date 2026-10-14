@@ -29,11 +29,11 @@ Earlier estimate was 20 to 40 s per run; reality is 2.5 to 11 s, so the full pla
 
 | Experiment | Matrix | Runs | Estimated time |
 |---|---|---|---|
-| E1 cost / accuracy vs tool count | 8 tasks x 2 arms x 3 models x n in {8,15,30,60} x 3 trials | 576 | about 1 h |
-| E2 heists, undefended | 32 scenarios (4 wordings per class) x 2 arms x 3 models x 3 trials | 576 (some n/a) | about 1.5 h |
-| E3 defenses | not built yet | | add about 1.5 h |
+| E1 cost / accuracy vs tool count | 8 tasks x 4 arms x 3 models x n in {8,15,30,60} x 3 trials | 1,152 | about 3 h (code arm is slowest) |
+| E2 heists, undefended | 32 scenarios (4 wordings per class) x 4 arms x 3 models x 3 trials, minus n/a | about 1,000 | about 2.5 h |
+| E3 defenses | attacks + benign, 2 models (3B, 7B), 2 trials, 3 defenses, 4 arms | about 1,900 | about 3 h |
 
-Total so far about 3 hours, one overnight with room to spare. Use `scripts/run_overnight.ps1`. The runner is resumable.
+About 4,000 runs, about 8 to 9 hours: one night. Use `scripts/run_overnight.ps1`; the runner is resumable and skips finished run ids. `direct` and `mcp` for E1/E2 were started first and are the first to finish.
 
 ## Method notes
 - Trials differ by seed: tool order, the per-run canary string and the Ollama sampling seed change; temperature is 0. So repeated trials measure sensitivity to layout, not sampling noise.

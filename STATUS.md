@@ -15,9 +15,9 @@ No GitHub repo yet (the user will create it later). Commits are local, author `b
 - Smoke runs (not results): a handful of runs on 3B and 7B models confirmed the whole pipeline end to end.
 
 ## Not done yet (in this order)
-1. **Arms `code` and `docs`** (`arms.py` raises NotImplementedError for them). `code`: Python module + Docker sandbox, progressive disclosure. `docs`: one `http_request` tool plus API docs text against a mock API.
+1. ~~Arms `code` and `docs`~~ DONE (restricted-subprocess sandbox instead of Docker, see docs/METHOD_NOTES.md). Defenses D1 to D3 are DONE too (`defenses.py`, `--defense pin prompt gate`). 33 tests.
 2. **Attack 4, "The Bait and Switch" (rug-pull)**: MCP `list_changed` after the first call. Not implemented; do not report it until it is.
-3. **Defenses D1 to D3** (description pinning, untrusted-text prompt, sink gate) and an `--defense` flag in the runner.
+3. (defenses: done)
 4. **Run E1 and E2** with `scripts/run_overnight.ps1`, then **analysis**: Wilson 95% intervals, accuracy-vs-n crossover, ASR heatmap, the "Surprise Finder" ranking, `docs/post-fodder.md`.
 5. **Site** (Vite + React + TS, same look family as the Jev projects but its own heist theme): Findings, Arena (replay of recorded runs), The Heists, Defense Shop, Trace Explorer, Methodology and dataset download. Static, free (Cloudflare Pages is already set up for Hopboard; reuse the account).
 6. README with findings and limits, 3 GIFs, 2 to 3 LinkedIn posts written from measured results only.
