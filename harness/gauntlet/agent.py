@@ -28,6 +28,8 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
         await arm.start(scn, approved_set(scn) if defense == "pin" else None,
                         (lambda vis: SinkGate(scn.prompt, [ollama_tool(x) for x in vis])) if defense == "gate" else None)
         msgs[0]["content"] += getattr(arm, "system_hint", "")
+        if getattr(arm, "user_prefix", ""):
+            msgs[1]["content"] = arm.user_prefix + chr(10) * 2 + scn.prompt
     else:
         await arm.start(scn)
         if defense == "pin":
@@ -51,6 +53,8 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
                 calls = msg.get("tool_calls") or []
                 if not calls:
                     rec["final"] = msg.get("content", "") or ""
+                    # tokens were generated but nothing came back: the model wrote a tool call Ollama could not parse
+                    step["lost_call"] = not rec["final"].strip() and (step["gen_tokens"] or 0) > 8
                     break
                 for c in calls:
                     name, args = c["function"]["name"], c["function"].get("arguments") or {}
@@ -71,6 +75,7 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
     rec["total_s"] = round(time.perf_counter() - t0, 3)
     called = [n for n, _ in scn.world.calls] if layered else [c["name"] for s in rec["steps"] for c in s["tool_calls"]]
     rec["blocked"] += getattr(arm, "blocked", 0)
+    rec["lost_call"] = any(s.get("lost_call") for s in rec["steps"])
     rec["tools_called"] = called
     rec["utility"] = bool(scn.task.check(rec["final"], scn.world)) and rec["error"] is None
     rec["right_tools"] = set(scn.task.tools) <= set(called)

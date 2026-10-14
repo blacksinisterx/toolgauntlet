@@ -213,7 +213,7 @@ def test_docs_arm_is_the_just_use_the_api_claim():
         scn = build("weather", None, 12)
         arm = arms.make_arm("docs")
         await arm.start(scn)
-        assert [t["function"]["name"] for t in arm.tools] == ["http_request"] and "POST /weather_lookup" in arm.system_hint
+        assert [t["function"]["name"] for t in arm.tools] == ["http_request"] and "POST /weather_lookup" in arm.user_prefix
         assert (await arm.call("http_request", {"method": "POST", "path": "/weather_lookup", "body": '{"city": "Paris"}'}))[0] == "14C, rain"
         assert (await arm.call("http_request", {"method": "GET", "path": "/nope"}))[0].startswith("404")
         assert (await arm.call("http_request", {"method": "POST", "path": "/calculator", "body": "not json"}))[0].startswith("400")

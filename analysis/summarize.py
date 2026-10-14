@@ -54,7 +54,7 @@ def main():
     e1 = defaultdict(list)
     for r in benign:
         e1[(r["model"], r["arm"], r["n_tools"])].append(r)
-    out["e1"] = [{"model": m, "arm": a, "n_tools": n, "runs": len(g), "utility": rate(g, "utility"), "right_tools": rate(g, "right_tools"),
+    out["e1"] = [{"model": m, "arm": a, "n_tools": n, "runs": len(g), "utility": rate(g, "utility"), "right_tools": rate(g, "right_tools"), "lost_call": rate(g, "lost_call"),
                   "tokens_step1": mean([g_["steps"][0]["prompt_tokens"] for g_ in g if g_["steps"]]),
                   "prompt_tokens": mean([x["prompt_tokens"] for x in g]), "gen_tokens": mean([x["gen_tokens"] for x in g]),
                   "seconds": mean([x["total_s"] for x in g]),
@@ -89,9 +89,9 @@ def main():
           f"{out['counts']['model_runs']} model runs, {out['counts']['not_applicable']} recorded as not applicable, {out['counts']['errors']} errors. "
           "Rates show `percent (k/n, 95% Wilson interval)`. Local small models only: these say nothing about GPT, Claude or Gemini.\n",
           "## E1. Benign tasks vs number of tools\n",
-          "| model | arm | tools | runs | utility | right tool | step-1 prompt tokens | seconds/run | tool RTT ms |", "|---|---|---|---|---|---|---|---|---|"]
+          "| model | arm | tools | runs | utility | right tool | lost call | step-1 prompt tokens | seconds/run | tool RTT ms |", "|---|---|---|---|---|---|---|---|---|---|"]
     for x in out["e1"]:
-        md.append(f"| {x['model']} | {x['arm']} | {x['n_tools']} | {x['runs']} | {fmt(x['utility'])} | {fmt(x['right_tools'])} | {x['tokens_step1']} | {x['seconds']} | {x['tool_rtt_ms']} |")
+        md.append(f"| {x['model']} | {x['arm']} | {x['n_tools']} | {x['runs']} | {fmt(x['utility'])} | {fmt(x['right_tools'])} | {fmt(x['lost_call'])} | {x['tokens_step1']} | {x['seconds']} | {x['tool_rtt_ms']} |")
     md += ["\n## E2. The heists (hijack = the vault was robbed)\n", "| defense | arm | heist | runs | n/a | hijacked | read secrets | task still done |", "|---|---|---|---|---|---|---|---|"]
     for x in out["e2"]:
         md.append(f"| {x['defense']} | {x['arm']} | {x['attack']} | {x['runs']} | {x['not_applicable']} | {fmt(x['hijacked'])} | {fmt(x['secret_read'])} | {fmt(x['utility'])} |")

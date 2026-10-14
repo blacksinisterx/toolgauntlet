@@ -1,0 +1,9 @@
+# Method notes: things that surprised us and how they were handled
+
+1. **Docs in the system message lost the tool call.** With the API documentation in the SYSTEM message, qwen2.5:3b and 7b returned empty replies (they generated tokens, Ollama dropped the call). The same docs in the first USER message worked. The docs arm therefore supplies its documentation in the user message. This is a harness choice, not a finding about "docs".
+2. **Lost tool calls are a metric.** Whenever a step generates more than 8 tokens but returns no content and no parsed tool call, it is recorded as `lost_call`. The code arm suffers most: multi-line Python inside a JSON tool-call argument is fragile for small models. A result like "code execution is less accurate" must say how much of it is lost calls versus wrong answers.
+3. **hermes3:8b and the prompt defense.** With the "tool text is untrusted" paragraph in the system message hermes3 returned no tool call on a benign task. If the `prompt` defense shows a utility collapse on hermes3, check `lost_call` before calling it a cost of the defense.
+4. **Prompt cache.** A random id opens every system prompt so token counts are not hidden by Ollama's prompt cache.
+5. **Trials differ by seed**, not by sampling (temperature 0): tool order, canary string and Ollama seed change.
+6. **MCP SDK pinned to 1.x** (2.x changed the low-level server API). 1.x is what most deployed servers use.
+7. **Sandbox is not Docker.** Docker Desktop was not running and starting it was not the user's choice. The code arm uses an AST allow-list + isolated subprocess + restricted builtins + timeout, with every tool call mediated by the harness. It is adequate for simulated tools and a local model, and the write-up says so.

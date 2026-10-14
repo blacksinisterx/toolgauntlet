@@ -159,7 +159,9 @@ class DocsArm(_Layered):
 
     async def start(self, scn: Scenario, allow=None, gate_factory=None):
         self._setup(scn, allow, gate_factory)
-        self.system_hint = "\n\n" + docs_text(self.visible)
+        # The docs go in the first user message: with long docs in the SYSTEM message, Ollama's Qwen template silently lost
+        # the model's tool call (empty reply). Measured on qwen2.5:3b and 7b; see docs/METHOD_NOTES.md.
+        self.user_prefix = docs_text(self.visible)
         self.tools = [ollama_tool({"name": "http_request", "description": "Send an HTTP request to the API described in the API reference.",
                                    "parameters": {"type": "object", "properties": {
                                        "method": {"type": "string", "description": "HTTP method, e.g. POST"},
@@ -170,7 +172,9 @@ class DocsArm(_Layered):
         t0 = time.perf_counter()
         if name != "http_request":
             return "error: unknown tool", 0.0
-        path = str(args.get("path", "")).split("?")[0].strip("/")
+        from urllib.parse import parse_qsl
+        path, _, query = str(args.get("path", "")).partition("?")
+        path = path.strip("/")
         try:
             body = args.get("body") or "{}"
             payload = json.loads(body) if isinstance(body, str) else dict(body)
@@ -178,7 +182,8 @@ class DocsArm(_Layered):
             return "400 bad request: body must be a JSON object", time.perf_counter() - t0
         if path not in self.visible_names:
             return "404 not found", time.perf_counter() - t0
-        return self._dispatch(path, payload if isinstance(payload, dict) else {}), time.perf_counter() - t0
+        payload = {**dict(parse_qsl(query)), **(payload if isinstance(payload, dict) else {})}   # a lenient API also reads the query string
+        return self._dispatch(path, payload), time.perf_counter() - t0
 
     async def stop(self):
         pass
