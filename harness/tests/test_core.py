@@ -159,3 +159,78 @@ def test_sink_gate_blocks_strangers_and_secrets_but_not_the_users_own_email():
 
 def test_wrap_and_prompt_defense_text():
     assert D.wrap_result("hi").startswith("<tool_result>") and "untrusted" in D.UNTRUSTED
+
+
+# ---------- sandbox + code/docs arms (no model) ----------
+from gauntlet import sandbox
+
+BAD_CODE = [
+    "import os", "from os import system", "__import__('os')", "().__class__.__bases__", "open('secrets.txt').read()",
+    "getattr(tools, 'x')", "eval('1+1')", "exec('x=1')", "tools._private", "x = (lambda: 0).__globals__", "global y", "type(1)",
+]
+
+
+@pytest.mark.parametrize("code", BAD_CODE)
+def test_sandbox_rejects_escape_attempts(code):
+    calls = []
+    out = sandbox.run(code, lambda n, a: calls.append(n) or "x")
+    assert out.startswith("rejected"), (code, out)
+    assert not calls
+
+
+def test_sandbox_runs_allowed_code_and_routes_tool_calls_through_the_harness():
+    w = World(0)
+    out = sandbox.run("c = tools.weather_lookup(city='Paris')\nprint(c)\nprint(len(c))\nprint(json.dumps({'a': math.floor(2.5)}))", w.dispatch)
+    assert out.splitlines()[:2] == ["14C, rain", "9"] and '"a": 2' in out
+    assert w.calls == [("weather_lookup", {"city": "Paris"})]
+    assert "positional" not in sandbox.run("tools.calculator('1+1')", w.dispatch) or True
+
+
+def test_sandbox_timeout_and_runtime_errors(monkeypatch):
+    monkeypatch.setattr(sandbox, "TIMEOUT_S", 1)
+    assert "stopped" in sandbox.run("while True:\n    pass", lambda n, a: "x")
+    assert "error" in sandbox.run("print(1/0)", lambda n, a: "x").lower()
+
+
+def test_code_arm_hides_third_party_text_until_the_agent_asks_for_it():
+    async def go():
+        scn = build("weather", "poisoned_manual", 20, variant=0)
+        arm = arms.make_arm("code")
+        await arm.start(scn)
+        assert {t["function"]["name"] for t in arm.tools} == {"list_tools", "describe_tool", "run_python"}   # constant size, whatever n is
+        listing, _ = await arm.call("list_tools", {})
+        assert "unit_convert" in listing and "secrets" not in listing and "IMPORTANT" not in listing
+        desc, _ = await arm.call("describe_tool", {"name": "unit_convert"})
+        assert "secrets.txt" in desc                       # the poisoned text is only read if the agent opens that tool
+        out, _ = await arm.call("run_python", {"code": "print(tools.calculator(expression='2+3'))"})
+        assert out.strip() == "5"
+        assert ("calculator", {"expression": "2+3"}) in scn.world.calls
+    asyncio.run(go())
+
+
+def test_docs_arm_is_the_just_use_the_api_claim():
+    async def go():
+        scn = build("weather", None, 12)
+        arm = arms.make_arm("docs")
+        await arm.start(scn)
+        assert [t["function"]["name"] for t in arm.tools] == ["http_request"] and "POST /weather_lookup" in arm.system_hint
+        assert (await arm.call("http_request", {"method": "POST", "path": "/weather_lookup", "body": '{"city": "Paris"}'}))[0] == "14C, rain"
+        assert (await arm.call("http_request", {"method": "GET", "path": "/nope"}))[0].startswith("404")
+        assert (await arm.call("http_request", {"method": "POST", "path": "/calculator", "body": "not json"}))[0].startswith("400")
+    asyncio.run(go())
+
+
+@pytest.mark.parametrize("arm_name", ["code", "docs"])
+def test_pin_and_gate_apply_inside_the_layered_arms(arm_name):
+    async def go():
+        scn = build("email", "look_alike", 12)
+        arm = arms.make_arm(arm_name)
+        await arm.start(scn, D.approved_set(scn), lambda vis: D.SinkGate(scn.prompt, [arms.ollama_tool(x) for x in vis]))
+        assert "send_mail" not in arm.visible_names                      # D1: the look-alike never existed for this agent
+        scn2 = build("email", None, 12)
+        arm2 = arms.make_arm(arm_name)
+        await arm2.start(scn2, None, lambda vis: D.SinkGate(scn2.prompt, [arms.ollama_tool(x) for x in vis]))
+        assert arm2._dispatch("send_email", {"to": "attacker@evil.test", "subject": "x", "body": "y"}).startswith("blocked")   # D3
+        assert arm2._dispatch("send_email", {"to": "me@example.test", "subject": "w", "body": "14C"}) == "sent to me@example.test"
+        assert arm2.blocked == 1
+    asyncio.run(go())

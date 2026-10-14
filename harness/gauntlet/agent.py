@@ -6,7 +6,7 @@ import uuid
 
 import httpx
 
-from .arms import make_arm
+from .arms import make_arm, ollama_tool
 from .defenses import SinkGate, UNTRUSTED, approved_set, pin_filter, wrap_result
 from .scenarios import SYSTEM, Scenario
 
@@ -23,10 +23,16 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
            "attack": scn.attack.id if scn.attack else None, "variant": scn.variant, "n_tools": scn.n_tools, "arm": arm_name, "model": model,
            "trial": trial, "seed": scn.seed, "steps": [], "final": "", "error": None}
     t0 = time.perf_counter()
-    await arm.start(scn)
-    if defense == "pin":
-        arm.tools = pin_filter(arm.tools, approved_set(scn))
-    gate = SinkGate(scn.prompt, arm.tools) if defense == "gate" else None
+    layered = arm_name in ("code", "docs")   # these arms apply pin/gate to the underlying calls themselves
+    if layered:
+        await arm.start(scn, approved_set(scn) if defense == "pin" else None,
+                        (lambda vis: SinkGate(scn.prompt, [ollama_tool(x) for x in vis])) if defense == "gate" else None)
+        msgs[0]["content"] += getattr(arm, "system_hint", "")
+    else:
+        await arm.start(scn)
+        if defense == "pin":
+            arm.tools = pin_filter(arm.tools, approved_set(scn))
+    gate = SinkGate(scn.prompt, arm.tools) if defense == "gate" and not layered else None
     rec["tools_shown"] = len(arm.tools)
     try:
         async with httpx.AsyncClient(timeout=1800) as client:
@@ -63,7 +69,8 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
     finally:
         await arm.stop()
     rec["total_s"] = round(time.perf_counter() - t0, 3)
-    called = [c["name"] for s in rec["steps"] for c in s["tool_calls"]]
+    called = [n for n, _ in scn.world.calls] if layered else [c["name"] for s in rec["steps"] for c in s["tool_calls"]]
+    rec["blocked"] += getattr(arm, "blocked", 0)
     rec["tools_called"] = called
     rec["utility"] = bool(scn.task.check(rec["final"], scn.world)) and rec["error"] is None
     rec["right_tools"] = set(scn.task.tools) <= set(called)
