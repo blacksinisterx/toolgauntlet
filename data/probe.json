@@ -1,0 +1,137 @@
+[
+  {
+    "model": "qwen2.5:7b",
+    "cases": [
+      {
+        "prompt": "What is 17 * 23? Use a tool.",
+        "tool": "calculator",
+        "args": {
+          "expression": "17 * 23"
+        },
+        "wall_s": 12.23,
+        "prompt_tokens": 200,
+        "gen_tokens": 24,
+        "gen_tok_per_s": 10.6,
+        "load_s": 7.25
+      },
+      {
+        "prompt": "What's the weather like in Lahore right now?",
+        "tool": "weather_lookup",
+        "args": {
+          "city": "Lahore"
+        },
+        "wall_s": 5.1,
+        "prompt_tokens": 196,
+        "gen_tokens": 22,
+        "gen_tok_per_s": 9.1,
+        "load_s": 0.08
+      },
+      {
+        "prompt": "Please compute 1250 / 5 for me.",
+        "tool": "calculator",
+        "args": {
+          "expression": "1250 / 5"
+        },
+        "wall_s": 5.72,
+        "prompt_tokens": 199,
+        "gen_tokens": 25,
+        "gen_tok_per_s": 8.9,
+        "load_s": 0.07
+      }
+    ],
+    "native_tool_calls": 3,
+    "correct_tool": 3,
+    "valid_args": 3,
+    "verdict": "usable"
+  },
+  {
+    "model": "hermes3:8b",
+    "cases": [
+      {
+        "prompt": "What is 17 * 23? Use a tool.",
+        "tool": "calculator",
+        "args": {
+          "expression": "17 * 23"
+        },
+        "wall_s": 16.53,
+        "prompt_tokens": 276,
+        "gen_tokens": 22,
+        "gen_tok_per_s": 10.1,
+        "load_s": 11.68
+      },
+      {
+        "prompt": "What's the weather like in Lahore right now?",
+        "tool": "weather_lookup",
+        "args": {
+          "city": "Lahore"
+        },
+        "wall_s": 5.56,
+        "prompt_tokens": 274,
+        "gen_tokens": 22,
+        "gen_tok_per_s": 9.0,
+        "load_s": 0.12
+      },
+      {
+        "prompt": "Please compute 1250 / 5 for me.",
+        "tool": "calculator",
+        "args": {
+          "expression": "1250 / 5"
+        },
+        "wall_s": 5.78,
+        "prompt_tokens": 275,
+        "gen_tokens": 23,
+        "gen_tok_per_s": 8.6,
+        "load_s": 0.12
+      }
+    ],
+    "native_tool_calls": 3,
+    "correct_tool": 3,
+    "valid_args": 3,
+    "verdict": "usable"
+  },
+  {
+    "model": "mistral:7b",
+    "cases": [
+      {
+        "prompt": "What is 17 * 23? Use a tool.",
+        "tool": "calculator",
+        "args": {
+          "expression": "17 * 23"
+        },
+        "wall_s": 17.93,
+        "prompt_tokens": 129,
+        "gen_tokens": 51,
+        "gen_tok_per_s": 10.1,
+        "load_s": 10.29
+      },
+      {
+        "prompt": "What's the weather like in Lahore right now?",
+        "tool": "weather_lookup",
+        "args": {
+          "city": "Lahore"
+        },
+        "wall_s": 15.03,
+        "prompt_tokens": 128,
+        "gen_tokens": 109,
+        "gen_tok_per_s": 8.9,
+        "load_s": 0.01
+      },
+      {
+        "prompt": "Please compute 1250 / 5 for me.",
+        "tool": "calculator",
+        "args": {
+          "expression": "1250 / 5"
+        },
+        "wall_s": 9.51,
+        "prompt_tokens": 128,
+        "gen_tokens": 60,
+        "gen_tok_per_s": 8.9,
+        "load_s": 0.01
+      }
+    ],
+    "native_tool_calls": 3,
+    "correct_tool": 3,
+    "valid_args": 3,
+    "verdict": "usable"
+  }
+]
