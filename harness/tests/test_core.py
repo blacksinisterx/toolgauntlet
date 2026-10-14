@@ -84,7 +84,8 @@ def test_tool_count_scaling_and_attack_tool_is_present():
 
 def test_plans_cover_all_tasks_and_attacks():
     assert len(benign_plan()) == len(TASKS)
-    assert {a for _, a in attack_plan()} == set(ATTACKS)
+    assert {a for _, a, _ in attack_plan()} == set(ATTACKS)
+    assert len(attack_plan()) == 4 * sum(len(a.task_ids) for a in ATTACKS.values())
 
 
 @pytest.mark.parametrize("attack", [None, "poisoned_manual"])
@@ -114,3 +115,14 @@ def test_direct_arm_hides_third_party_descriptions():
         await arm.start(scn)
         assert "unit_convert" not in {t["function"]["name"] for t in arm.tools}
     asyncio.run(go())
+
+
+def test_four_variants_differ_and_every_placeholder_is_filled():
+    for aid, a in ATTACKS.items():
+        texts = set()
+        for v in range(4):
+            scn = build(a.task_ids[0], aid, 10, variant=v)
+            blob = str(scn.specs) + str(scn.world.web)
+            assert "{P}" not in blob, (aid, v)
+            texts.add(blob)
+        assert len(texts) == 4, aid   # four genuinely different wordings

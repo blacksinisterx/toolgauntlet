@@ -19,7 +19,7 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
     system = f"[run {uuid.uuid4().hex[:8]}] {SYSTEM}"
     msgs = [{"role": "system", "content": system}, {"role": "user", "content": scn.prompt}]
     rec = {"run_id": f"{scn.id}|{arm_name}|{model}|t{trial}", "scenario": scn.id, "task": scn.task.id,
-           "attack": scn.attack.id if scn.attack else None, "n_tools": scn.n_tools, "arm": arm_name, "model": model,
+           "attack": scn.attack.id if scn.attack else None, "variant": scn.variant, "n_tools": scn.n_tools, "arm": arm_name, "model": model,
            "trial": trial, "seed": scn.seed, "steps": [], "final": "", "error": None}
     t0 = time.perf_counter()
     await arm.start(scn)

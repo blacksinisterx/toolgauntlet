@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 .pytest_cache/
 data/runs.jsonl.tmp
+data/smoke*.jsonl

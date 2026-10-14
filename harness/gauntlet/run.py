@@ -46,9 +46,9 @@ async def main():
     for model in a.models:
         for n in a.n_tools:
             for arm in a.arms:
-                for task, attack in plan:
+                for task, attack, variant in plan:
                     for t in range(a.trials):
-                        scn = build(task, attack, n, seed=t)
+                        scn = build(task, attack, n, seed=t, variant=variant)
                         rid = f"{scn.id}|{arm}|{model}|t{t}"
                         if rid not in seen:
                             todo.append((scn, arm, model, t, rid))
@@ -60,7 +60,7 @@ async def main():
     for i, (scn, arm, model, t, rid) in enumerate(todo, 1):
         if not scn.applies(arm):  # attack cannot reach the model in this arm: record the fact, do not spend a run
             rec = {"run_id": rid, "scenario": scn.id, "task": scn.task.id, "attack": scn.attack.id, "n_tools": scn.n_tools,
-                   "arm": arm, "model": model, "trial": t, "na": True}
+                   "variant": scn.variant, "arm": arm, "model": model, "trial": t, "na": True}
         else:
             rec = await run_once(scn, arm, model, t)
         with a.out.open("a", encoding="utf8") as f:
