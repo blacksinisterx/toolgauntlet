@@ -18,7 +18,7 @@ No GitHub repo yet (the user will create it later). Commits are local, author `b
 - **E1 for `direct` and `mcp`: complete** (576 runs, 3 models, 4 tool counts x 3 trials). 0 errors.
 - **E2 (heists, undefended): started, 137 of 576 rows** (the first model, qwen2.5:3b, partly done). Resumable.
 - **Not started:** E1/E2 for `code` and `docs`; E3 (defenses).
-- Resume everything with `powershell -ExecutionPolicy Bypass -File scriptsun_overnight.ps1` (about 7 hours more). Finished run ids are skipped.
+- Resume everything with ``bash scripts/resume.sh` (Git Bash; Ollama must be running) or `powershell -ExecutionPolicy Bypass -File scripts/run_overnight.ps1`` (about 7 hours more; `resume.sh` also waits for the model downloads). Finished run ids are skipped.
 - Rebuild tables with `.venv\Scripts\python analysis\summarize.py` (writes `docs/RESULTS.md`).
 
 ## Not done yet (in this order)
