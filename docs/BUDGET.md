@@ -15,14 +15,14 @@ Probe: 3 prompts, two tools, temperature 0 (`harness/gauntlet/probe.py`).
 
 ## Whole-run time in the harness (agent loop, 2 model calls, MCP over real stdio)
 
-| Model | Tools shown | Prompt tokens (step 1) | Seconds per run |
+| Model | Tools shown | Prompt tokens (whole run, 2 model calls) | Seconds per run |
 |---|---|---|---|
 | qwen2.5:3b | 8 | ~1,250 | ~2.5 |
 | qwen2.5:7b | 8 | ~1,250 | ~7 to 9 |
 | qwen2.5:7b | 60 | ~6,300 | ~11 |
 | hermes3:8b | 30 | ~3,400 | ~6 to 20 (first call loads the model) |
 
-Tool-schema cost is about 100 prompt tokens per tool. MCP round-trip per tool call: about 4 to 6 ms. Direct in-process call: well under 1 ms.
+Tool-schema cost is about 48 prompt tokens per tool: step-1 prompts measured in E1 were about 600 tokens at 8 tools and about 3,100 at 60 (the whole-run totals above count two model calls). An earlier version of this file said 100 per tool; that mixed up a two-call total with a single prompt. MCP round-trip per tool call: about 4 to 6 ms. Direct in-process call: well under 1 ms.
 
 ## Frozen budget
 Earlier estimate was 20 to 40 s per run; reality is 2.5 to 11 s, so the full plan fits easily.
