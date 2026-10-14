@@ -14,6 +14,13 @@ No GitHub repo yet (the user will create it later). Commits are local, author `b
   - `tests/test_core.py`: 12 deterministic tests (no LLM), including a real MCP stdio round trip.
 - Smoke runs (not results): a handful of runs on 3B and 7B models confirmed the whole pipeline end to end.
 
+## Experiment progress (stopped on purpose, resume tomorrow)
+- **E1 for `direct` and `mcp`: complete** (576 runs, 3 models, 4 tool counts x 3 trials). 0 errors.
+- **E2 (heists, undefended): started, 137 of 576 rows** (the first model, qwen2.5:3b, partly done). Resumable.
+- **Not started:** E1/E2 for `code` and `docs`; E3 (defenses).
+- Resume everything with `powershell -ExecutionPolicy Bypass -File scriptsun_overnight.ps1` (about 7 hours more). Finished run ids are skipped.
+- Rebuild tables with `.venv\Scripts\python analysis\summarize.py` (writes `docs/RESULTS.md`).
+
 ## Not done yet (in this order)
 1. ~~Arms `code` and `docs`~~ DONE (restricted-subprocess sandbox instead of Docker, see docs/METHOD_NOTES.md). Defenses D1 to D3 are DONE too (`defenses.py`, `--defense pin prompt gate`). 33 tests.
 2. **Attack 4, "The Bait and Switch" (rug-pull)**: MCP `list_changed` after the first call. Not implemented; do not report it until it is.

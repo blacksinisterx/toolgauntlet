@@ -7,3 +7,4 @@
 5. **Trials differ by seed**, not by sampling (temperature 0): tool order, canary string and Ollama seed change.
 6. **MCP SDK pinned to 1.x** (2.x changed the low-level server API). 1.x is what most deployed servers use.
 7. **Sandbox is not Docker.** Docker Desktop was not running and starting it was not the user's choice. The code arm uses an AST allow-list + isolated subprocess + restricted builtins + timeout, with every tool call mediated by the harness. It is adequate for simulated tools and a local model, and the write-up says so.
+8. **Timing caveat for E1.** Token counts and utility are unaffected, but some seconds-per-run values are inflated because debugging runs were sharing the GPU at the time (qwen2.5:7b `mcp` at 8 tools shows 26 s and `direct` at 15 tools shows 15.6 s, against 7 to 10 s for the neighbouring cells). Do not quote those two cells as latency. Re-run them alone if latency is ever reported per cell.
