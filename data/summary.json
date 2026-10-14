@@ -1,7 +1,7 @@
 {
   "counts": {
-    "rows": 148,
-    "model_runs": 148,
+    "rows": 262,
+    "model_runs": 262,
     "not_applicable": 0,
     "errors": 0
   },
@@ -24,6 +24,13 @@
         "p": 0.75,
         "lo": 0.551,
         "hi": 0.88
+      },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
       },
       "tokens_step1": 599.875,
       "prompt_tokens": 1143.917,
@@ -50,6 +57,13 @@
         "lo": 0.551,
         "hi": 0.88
       },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
       "tokens_step1": 938.292,
       "prompt_tokens": 1886.292,
       "gen_tokens": 51.958,
@@ -75,6 +89,13 @@
         "lo": 0.551,
         "hi": 0.88
       },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
       "tokens_step1": 1667.375,
       "prompt_tokens": 3242.625,
       "gen_tokens": 49.417,
@@ -85,26 +106,33 @@
       "model": "qwen2.5:3b",
       "arm": "direct",
       "n_tools": 60,
-      "runs": 4,
+      "runs": 24,
       "utility": {
-        "k": 3,
-        "n": 4,
-        "p": 0.75,
-        "lo": 0.301,
-        "hi": 0.954
+        "k": 17,
+        "n": 24,
+        "p": 0.708,
+        "lo": 0.508,
+        "hi": 0.851
       },
       "right_tools": {
-        "k": 3,
-        "n": 4,
-        "p": 0.75,
-        "lo": 0.301,
-        "hi": 0.954
+        "k": 17,
+        "n": 24,
+        "p": 0.708,
+        "lo": 0.508,
+        "hi": 0.851
       },
-      "tokens_step1": 3117.75,
-      "prompt_tokens": 5488.75,
-      "gen_tokens": 36,
-      "seconds": 2.554,
-      "tool_rtt_ms": 0.0
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
+      "tokens_step1": 3120.917,
+      "prompt_tokens": 6027.5,
+      "gen_tokens": 49.958,
+      "seconds": 2.776,
+      "tool_rtt_ms": 0.013
     },
     {
       "model": "qwen2.5:3b",
@@ -124,6 +152,13 @@
         "p": 0.833,
         "lo": 0.641,
         "hi": 0.933
+      },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
       },
       "tokens_step1": 599.75,
       "prompt_tokens": 1197.708,
@@ -150,6 +185,13 @@
         "lo": 0.467,
         "hi": 0.82
       },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
       "tokens_step1": 938.417,
       "prompt_tokens": 1845.375,
       "gen_tokens": 51.25,
@@ -175,11 +217,146 @@
         "lo": 0.508,
         "hi": 0.851
       },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
       "tokens_step1": 1667.375,
       "prompt_tokens": 3170.75,
       "gen_tokens": 49.042,
       "seconds": 2.815,
       "tool_rtt_ms": 4.304
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "mcp",
+      "n_tools": 60,
+      "runs": 24,
+      "utility": {
+        "k": 16,
+        "n": 24,
+        "p": 0.667,
+        "lo": 0.467,
+        "hi": 0.82
+      },
+      "right_tools": {
+        "k": 16,
+        "n": 24,
+        "p": 0.667,
+        "lo": 0.467,
+        "hi": 0.82
+      },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
+      "tokens_step1": 3120.875,
+      "prompt_tokens": 5894.75,
+      "gen_tokens": 48.5,
+      "seconds": 3.424,
+      "tool_rtt_ms": 3.425
+    },
+    {
+      "model": "qwen2.5:7b",
+      "arm": "direct",
+      "n_tools": 8,
+      "runs": 24,
+      "utility": {
+        "k": 21,
+        "n": 24,
+        "p": 0.875,
+        "lo": 0.69,
+        "hi": 0.957
+      },
+      "right_tools": {
+        "k": 23,
+        "n": 24,
+        "p": 0.958,
+        "lo": 0.798,
+        "hi": 0.993
+      },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
+      "tokens_step1": 599.792,
+      "prompt_tokens": 1256.333,
+      "gen_tokens": 51.417,
+      "seconds": 7.19,
+      "tool_rtt_ms": 0.025
+    },
+    {
+      "model": "qwen2.5:7b",
+      "arm": "direct",
+      "n_tools": 15,
+      "runs": 22,
+      "utility": {
+        "k": 21,
+        "n": 22,
+        "p": 0.955,
+        "lo": 0.782,
+        "hi": 0.992
+      },
+      "right_tools": {
+        "k": 21,
+        "n": 22,
+        "p": 0.955,
+        "lo": 0.782,
+        "hi": 0.992
+      },
+      "lost_call": {
+        "k": 0,
+        "n": 22,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.149
+      },
+      "tokens_step1": 938.818,
+      "prompt_tokens": 1930.455,
+      "gen_tokens": 48.227,
+      "seconds": 16.094,
+      "tool_rtt_ms": 0.055
+    },
+    {
+      "model": "qwen2.5:7b",
+      "arm": "mcp",
+      "n_tools": 8,
+      "runs": 24,
+      "utility": {
+        "k": 21,
+        "n": 24,
+        "p": 0.875,
+        "lo": 0.69,
+        "hi": 0.957
+      },
+      "right_tools": {
+        "k": 23,
+        "n": 24,
+        "p": 0.958,
+        "lo": 0.798,
+        "hi": 0.993
+      },
+      "lost_call": {
+        "k": 0,
+        "n": 24,
+        "p": 0.0,
+        "lo": 0.0,
+        "hi": 0.138
+      },
+      "tokens_step1": 599.167,
+      "prompt_tokens": 1255.292,
+      "gen_tokens": 51.708,
+      "seconds": 26.192,
+      "tool_rtt_ms": 6.231
     }
   ],
   "e2": [],
@@ -189,22 +366,22 @@
       "defense": "none",
       "arm": "direct",
       "utility": {
-        "k": 56,
-        "n": 76,
-        "p": 0.737,
-        "lo": 0.628,
-        "hi": 0.823
+        "k": 112,
+        "n": 142,
+        "p": 0.789,
+        "lo": 0.714,
+        "hi": 0.848
       }
     },
     {
       "defense": "none",
       "arm": "mcp",
       "utility": {
-        "k": 53,
-        "n": 72,
-        "p": 0.736,
-        "lo": 0.624,
-        "hi": 0.824
+        "k": 90,
+        "n": 120,
+        "p": 0.75,
+        "lo": 0.666,
+        "hi": 0.819
       }
     }
   ]

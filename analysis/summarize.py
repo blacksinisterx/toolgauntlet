@@ -23,7 +23,7 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
 
 
 def rate(rows, key):
-    k = sum(1 for r in rows if r[key])
+    k = sum(1 for r in rows if r.get(key))
     lo, hi = wilson(k, len(rows))
     return {"k": k, "n": len(rows), "p": round(k / len(rows), 3) if rows else None, "lo": round(lo, 3), "hi": round(hi, 3)}
 
