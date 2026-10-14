@@ -1,0 +1,211 @@
+{
+  "counts": {
+    "rows": 148,
+    "model_runs": 148,
+    "not_applicable": 0,
+    "errors": 0
+  },
+  "e1": [
+    {
+      "model": "qwen2.5:3b",
+      "arm": "direct",
+      "n_tools": 8,
+      "runs": 24,
+      "utility": {
+        "k": 17,
+        "n": 24,
+        "p": 0.708,
+        "lo": 0.508,
+        "hi": 0.851
+      },
+      "right_tools": {
+        "k": 18,
+        "n": 24,
+        "p": 0.75,
+        "lo": 0.551,
+        "hi": 0.88
+      },
+      "tokens_step1": 599.875,
+      "prompt_tokens": 1143.917,
+      "gen_tokens": 48.875,
+      "seconds": 1.583,
+      "tool_rtt_ms": 0.021
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "direct",
+      "n_tools": 15,
+      "runs": 24,
+      "utility": {
+        "k": 18,
+        "n": 24,
+        "p": 0.75,
+        "lo": 0.551,
+        "hi": 0.88
+      },
+      "right_tools": {
+        "k": 18,
+        "n": 24,
+        "p": 0.75,
+        "lo": 0.551,
+        "hi": 0.88
+      },
+      "tokens_step1": 938.292,
+      "prompt_tokens": 1886.292,
+      "gen_tokens": 51.958,
+      "seconds": 1.668,
+      "tool_rtt_ms": 0.017
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "direct",
+      "n_tools": 30,
+      "runs": 24,
+      "utility": {
+        "k": 18,
+        "n": 24,
+        "p": 0.75,
+        "lo": 0.551,
+        "hi": 0.88
+      },
+      "right_tools": {
+        "k": 18,
+        "n": 24,
+        "p": 0.75,
+        "lo": 0.551,
+        "hi": 0.88
+      },
+      "tokens_step1": 1667.375,
+      "prompt_tokens": 3242.625,
+      "gen_tokens": 49.417,
+      "seconds": 1.954,
+      "tool_rtt_ms": 0.013
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "direct",
+      "n_tools": 60,
+      "runs": 4,
+      "utility": {
+        "k": 3,
+        "n": 4,
+        "p": 0.75,
+        "lo": 0.301,
+        "hi": 0.954
+      },
+      "right_tools": {
+        "k": 3,
+        "n": 4,
+        "p": 0.75,
+        "lo": 0.301,
+        "hi": 0.954
+      },
+      "tokens_step1": 3117.75,
+      "prompt_tokens": 5488.75,
+      "gen_tokens": 36,
+      "seconds": 2.554,
+      "tool_rtt_ms": 0.0
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "mcp",
+      "n_tools": 8,
+      "runs": 24,
+      "utility": {
+        "k": 20,
+        "n": 24,
+        "p": 0.833,
+        "lo": 0.641,
+        "hi": 0.933
+      },
+      "right_tools": {
+        "k": 20,
+        "n": 24,
+        "p": 0.833,
+        "lo": 0.641,
+        "hi": 0.933
+      },
+      "tokens_step1": 599.75,
+      "prompt_tokens": 1197.708,
+      "gen_tokens": 48.458,
+      "seconds": 2.312,
+      "tool_rtt_ms": 4.877
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "mcp",
+      "n_tools": 15,
+      "runs": 24,
+      "utility": {
+        "k": 16,
+        "n": 24,
+        "p": 0.667,
+        "lo": 0.467,
+        "hi": 0.82
+      },
+      "right_tools": {
+        "k": 16,
+        "n": 24,
+        "p": 0.667,
+        "lo": 0.467,
+        "hi": 0.82
+      },
+      "tokens_step1": 938.417,
+      "prompt_tokens": 1845.375,
+      "gen_tokens": 51.25,
+      "seconds": 2.374,
+      "tool_rtt_ms": 7.013
+    },
+    {
+      "model": "qwen2.5:3b",
+      "arm": "mcp",
+      "n_tools": 30,
+      "runs": 24,
+      "utility": {
+        "k": 17,
+        "n": 24,
+        "p": 0.708,
+        "lo": 0.508,
+        "hi": 0.851
+      },
+      "right_tools": {
+        "k": 17,
+        "n": 24,
+        "p": 0.708,
+        "lo": 0.508,
+        "hi": 0.851
+      },
+      "tokens_step1": 1667.375,
+      "prompt_tokens": 3170.75,
+      "gen_tokens": 49.042,
+      "seconds": 2.815,
+      "tool_rtt_ms": 4.304
+    }
+  ],
+  "e2": [],
+  "e2_by_model": [],
+  "defense_utility": [
+    {
+      "defense": "none",
+      "arm": "direct",
+      "utility": {
+        "k": 56,
+        "n": 76,
+        "p": 0.737,
+        "lo": 0.628,
+        "hi": 0.823
+      }
+    },
+    {
+      "defense": "none",
+      "arm": "mcp",
+      "utility": {
+        "k": 53,
+        "n": 72,
+        "p": 0.736,
+        "lo": 0.624,
+        "hi": 0.824
+      }
+    }
+  ]
+}

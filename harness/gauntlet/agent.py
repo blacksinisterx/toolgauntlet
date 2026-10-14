@@ -7,22 +7,26 @@ import uuid
 import httpx
 
 from .arms import make_arm
+from .defenses import SinkGate, UNTRUSTED, approved_set, pin_filter, wrap_result
 from .scenarios import SYSTEM, Scenario
 
 OLLAMA = "http://localhost:11434"
 MAX_STEPS = 6
 
 
-async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num_ctx: int = 8192) -> dict:
+async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num_ctx: int = 8192, defense: str = "none") -> dict:
     arm = make_arm(arm_name)
     # a unique first line defeats Ollama's prompt cache across runs, so token counts reflect the whole prompt
-    system = f"[run {uuid.uuid4().hex[:8]}] {SYSTEM}"
+    system = f"[run {uuid.uuid4().hex[:8]}] {SYSTEM}" + (f" {UNTRUSTED}" if defense == "prompt" else "")
     msgs = [{"role": "system", "content": system}, {"role": "user", "content": scn.prompt}]
-    rec = {"run_id": f"{scn.id}|{arm_name}|{model}|t{trial}", "scenario": scn.id, "task": scn.task.id,
+    rec = {"run_id": f"{scn.id}|{arm_name}|{model}|t{trial}" + ("" if defense == "none" else f"|d:{defense}"), "defense": defense, "blocked": 0, "scenario": scn.id, "task": scn.task.id,
            "attack": scn.attack.id if scn.attack else None, "variant": scn.variant, "n_tools": scn.n_tools, "arm": arm_name, "model": model,
            "trial": trial, "seed": scn.seed, "steps": [], "final": "", "error": None}
     t0 = time.perf_counter()
     await arm.start(scn)
+    if defense == "pin":
+        arm.tools = pin_filter(arm.tools, approved_set(scn))
+    gate = SinkGate(scn.prompt, arm.tools) if defense == "gate" else None
     rec["tools_shown"] = len(arm.tools)
     try:
         async with httpx.AsyncClient(timeout=1800) as client:
@@ -44,9 +48,16 @@ async def run_once(scn: Scenario, arm_name: str, model: str, trial: int = 0, num
                     break
                 for c in calls:
                     name, args = c["function"]["name"], c["function"].get("arguments") or {}
-                    text, rtt = await arm.call(name, args if isinstance(args, dict) else {})
-                    step["tool_calls"].append({"name": name, "args": args, "result": text[:300], "rtt_s": round(rtt, 4)})
-                    msgs.append({"role": "tool", "content": text, "tool_name": name})
+                    args = args if isinstance(args, dict) else {}
+                    reason = gate.check(name, args) if gate else None
+                    if reason:  # the gate stops the call before it reaches the tool
+                        text, rtt, rec["blocked"] = reason, 0.0, rec["blocked"] + 1
+                    else:
+                        text, rtt = await arm.call(name, args)
+                        if gate:
+                            gate.observe(name, args, text)
+                    step["tool_calls"].append({"name": name, "args": args, "result": text[:300], "rtt_s": round(rtt, 4), "blocked": bool(reason)})
+                    msgs.append({"role": "tool", "content": wrap_result(text) if defense == "prompt" else text, "tool_name": name})
     except Exception as e:  # a failed run is data, not a crash
         rec["error"] = f"{type(e).__name__}: {str(e)[:200]}"
     finally:

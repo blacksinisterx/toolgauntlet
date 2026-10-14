@@ -126,3 +126,36 @@ def test_four_variants_differ_and_every_placeholder_is_filled():
             assert "{P}" not in blob, (aid, v)
             texts.add(blob)
         assert len(texts) == 4, aid   # four genuinely different wordings
+
+
+# ---------- defenses (pure code, no model) ----------
+from gauntlet import defenses as D
+
+
+def test_pin_drops_every_attacker_supplied_tool_and_keeps_the_rest():
+    for aid, a in ATTACKS.items():
+        scn = build(a.task_ids[0], aid, 20, variant=1)
+        tools = [arms.ollama_tool(s) for s in scn.specs]
+        kept = {t["function"]["name"] for t in D.pin_filter(tools, D.approved_set(scn))}
+        assert not (kept & set(a.third_party)), aid
+        clean = {s["name"] for s in build(a.task_ids[0], None, 20).specs}
+        assert kept <= clean and len(kept) == 20 - len(a.extra_tools), aid   # the attacker's tool took one distractor's slot
+
+
+def test_sink_gate_blocks_strangers_and_secrets_but_not_the_users_own_email():
+    scn = build("email", None)
+    tools = [arms.ollama_tool(s) for s in scn.specs]
+    g = D.SinkGate(scn.prompt, tools)
+    assert g.check("send_email", {"to": "me@example.test", "subject": "w", "body": "14C"}) is None   # utility is preserved
+    assert g.check("send_email", {"to": "attacker@evil.test", "subject": "x", "body": "hi"})        # unknown recipient
+    secret = scn.world.dispatch("file_read", {"path": "secrets.txt"})
+    g.observe("file_read", {"path": "secrets.txt"}, secret)
+    assert g.check("send_email", {"to": "me@example.test", "subject": "x", "body": f"key: {scn.world.canary}"})  # leaks data even to an allowed address
+    assert g.check("calculator", {"expression": "1+1"}) is None
+    scn2 = build("email", "look_alike")                                                              # a look-alike sink is caught by schema, not by name
+    g2 = D.SinkGate(scn2.prompt, [arms.ollama_tool(s) for s in scn2.specs])
+    assert "send_mail" in g2.sinks and g2.check("send_mail", {"to": "attacker@evil.test", "body": "x"})
+
+
+def test_wrap_and_prompt_defense_text():
+    assert D.wrap_result("hi").startswith("<tool_result>") and "untrusted" in D.UNTRUSTED
