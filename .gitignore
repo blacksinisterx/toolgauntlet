@@ -4,3 +4,9 @@ __pycache__/
 .pytest_cache/
 data/runs.jsonl.tmp
 data/smoke*.jsonl
+node_modules/
+site/dist/
+site/.vite/
+media/out/
+media/tmp/
+site/public/data/

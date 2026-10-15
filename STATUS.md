@@ -15,11 +15,14 @@ No GitHub repo yet (the user will create it later). Commits are local, author `b
 - Smoke runs (not results): a handful of runs on 3B and 7B models confirmed the whole pipeline end to end.
 
 ## Experiment progress (stopped on purpose, resume tomorrow)
-- **E1 for `direct` and `mcp`: complete** (576 runs, 3 models, 4 tool counts x 3 trials). 0 errors.
-- **E2 (heists, undefended): started, 137 of 576 rows** (the first model, qwen2.5:3b, partly done). Resumable.
-- **Not started:** E1/E2 for `code` and `docs`; E3 (defenses).
-- Resume everything with ``bash scripts/resume.sh` (Git Bash; Ollama must be running) or `powershell -ExecutionPolicy Bypass -File scripts/run_overnight.ps1`` (about 7 hours more; `resume.sh` also waits for the model downloads). Finished run ids are skipped.
-- Rebuild tables with `.venv\Scripts\python analysis\summarize.py` (writes `docs/RESULTS.md`).
+- **Done: 3840 rows (3252 model runs + 588 not-applicable), 0 errors, 0 duplicates.**
+  - E1 benign (all 4 arms x 3 models x 8/15/30/60 tools x 3 trials): complete.
+  - E2 heists, undefended (all 4 arms x 3 models): complete.
+  - E3 defenses, attack side (pin, prompt, gate on qwen2.5:3b and 7b, all 4 arms, 2 trials): complete.
+- **Not run yet: E3 benign side** (`--plan benign --defense pin prompt gate`, about 384 runs): the price of each defense in tasks completed. The site's Defense Shop shows "not run yet" for it. `bash scripts/resume.sh` skips every finished run and picks this up (it also re-checks the earlier phases, which are no-ops).
+- Rebuild tables with `.venv\Scripts\python analysis\summarize.py`, then `analysis\export_site.py` (writes `site/public/data/`, git-ignored).
+- Honest reading so far: almost no robberies in any arm (these models mostly do not obey the planted instructions); the code and docs arms barely complete the benign tasks on these small models (code 5%, docs 14% vs 73% for direct and MCP), so their "0% hijacked" is confounded by failing the task. Say so in the README and posts.
+- Site: `site/` (Vite + React). Builds and renders; not deployed yet.
 
 ## Not done yet (in this order)
 1. ~~Arms `code` and `docs`~~ DONE (restricted-subprocess sandbox instead of Docker, see docs/METHOD_NOTES.md). Defenses D1 to D3 are DONE too (`defenses.py`, `--defense pin prompt gate`). 33 tests.
