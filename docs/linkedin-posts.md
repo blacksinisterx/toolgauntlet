@@ -2,17 +2,17 @@
 
 Short on purpose. Pick one, post it, post the next a few days later.
 
-## Post 1: MCP vs plain function calling
+## Post 1: "MCP is dead"
 
-I measured MCP against plain function calling, on local models (qwen2.5 3B and 7B, hermes3 8B). Same agent, same tasks, same tools.
+"MCP is dead, just use the API." Someone told me that. It's a claim, not a benchmark, so I built one.
 
-What the model reads: identical. Across 12 model and size combinations the prompts differed by at most 0.6 tokens.
-How many everyday tasks it finished: 73% for both (210 of 288 vs 209 of 288), from 8 up to 60 tools.
-What MCP actually costs: time. 5.7 ms per tool call against under 1 ms, and about 0.7 s more per run on the 3B model.
+I ran 3,636 agent runs on local models (qwen2.5 3B and 7B, hermes3 8B). Same tasks, same tools, four ways of handing them to the model.
 
-So the MCP argument is not about tokens or accuracy. It's about whether you want a protocol.
+MCP vs plain function calling: the model reads the same thing (prompts differed by at most 0.6 tokens) and finishes the same share of everyday tasks, 73% vs 73%, from 8 up to 60 tools. MCP's cost is a protocol hop: 5.7 ms per tool call against under 1 ms.
 
-3B to 8B models only, nothing here speaks for GPT or Claude. Data and an interactive site: https://toolgauntlet.vercel.app
+"Just use the API" (one HTTP tool plus the docs): 33% of tasks at 8 tools, 1% at 60.
+
+So not dead, at least not on these models. 3B to 8B only, nothing here speaks for GPT or Claude. Data and an interactive site: https://toolgauntlet.vercel.app
 
 ## Post 2: "Just give the agent the API docs"
 

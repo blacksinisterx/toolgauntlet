@@ -46,7 +46,7 @@ export function Findings({ data }: { data: Data }) {
         <div>
           <Stamp tone="muted">Case file no. 001</Stamp>
           <h1>Four ways to give an AI agent its tools.<br />Five ways to break them.</h1>
-          <p className="lead">Same agent, same tasks, same vault. Only the way the tools reach the model changes. This is what each costs, and how easy each is to rob.</p>
+          <p className="lead">Same agent, same tasks, same vault. Only the way the tools reach the model changes. This is what each costs, and how easy each is to hijack.</p>
           <div className="chips">
             <span><b>{s.counts.model_runs.toLocaleString()}</b> measured runs</span><span><b>3</b> local models</span>
             <span><b>{armsHere.length}</b> tool layers so far</span><span><b>{s.counts.errors}</b> crashed runs</span>
@@ -58,6 +58,7 @@ export function Findings({ data }: { data: Data }) {
           <svg viewBox="0 0 300 220"><path d="M40 40 C120 110 160 20 250 60 S 90 160 60 170 S 220 200 260 150" fill="none" stroke="var(--red)" strokeWidth="2.5" strokeDasharray="1 0" opacity=".8" /></svg>
         </aside>
       </section>
+
 
       <section>
         <h2>What does the tool layer cost?</h2>
