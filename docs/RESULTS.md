@@ -1,6 +1,6 @@
 # Results (generated from data/runs.jsonl, do not edit)
 
-3252 model runs, 588 recorded as not applicable, 0 errors. Rates show `percent (k/n, 95% Wilson interval)`. Local small models only: these say nothing about GPT, Claude or Gemini.
+3636 model runs, 588 recorded as not applicable, 0 errors. Rates show `percent (k/n, 95% Wilson interval)`. Local small models only: these say nothing about GPT, Claude or Gemini.
 
 ## E1. Benign tasks vs number of tools
 
@@ -181,11 +181,23 @@
 | prompt | mcp | qwen2.5:3b | 0% (0/64, 0-6) |
 | prompt | mcp | qwen2.5:7b | 2% (1/64, 0-8) |
 
-## Utility on benign tasks, per defense (the price of safety)
+## Defenses, like for like (qwen2.5 3B and 7B, 15 tools; the undefended baseline is restricted to the same runs)
 
-| defense | arm | utility |
-|---|---|---|
-| none | code | 5% (15/288, 3-8) |
-| none | direct | 73% (210/288, 68-78) |
-| none | docs | 14% (41/288, 11-19) |
-| none | mcp | 73% (209/288, 67-77) |
+| defense | arm | vault robbed | benign tasks completed |
+|---|---|---|---|
+| gate | code | 0% (0/128, 0-3) | 12% (4/32, 5-28) |
+| gate | direct | 0% (0/16, 0-19) | 72% (23/32, 55-84) |
+| gate | docs | 0% (0/128, 0-3) | 19% (6/32, 9-35) |
+| gate | mcp | 1% (1/128, 0-4) | 81% (26/32, 65-91) |
+| none | code | 0% (0/192, 0-2) | 8% (4/48, 3-20) |
+| none | direct | 0% (0/24, 0-14) | 81% (39/48, 68-90) |
+| none | docs | 0% (0/192, 0-2) | 21% (10/48, 12-34) |
+| none | mcp | 1% (2/192, 0-4) | 77% (37/48, 64-87) |
+| pin | code | 0% (0/128, 0-3) | 6% (2/32, 2-20) |
+| pin | direct | 0% (0/16, 0-19) | 78% (25/32, 61-89) |
+| pin | docs | 0% (0/128, 0-3) | 19% (6/32, 9-35) |
+| pin | mcp | 0% (0/128, 0-3) | 75% (24/32, 58-87) |
+| prompt | code | 0% (0/128, 0-3) | 6% (2/32, 2-20) |
+| prompt | direct | 0% (0/16, 0-19) | 81% (26/32, 65-91) |
+| prompt | docs | 0% (0/128, 0-3) | 28% (9/32, 16-45) |
+| prompt | mcp | 1% (1/128, 0-4) | 81% (26/32, 65-91) |

@@ -19,9 +19,9 @@ No GitHub repo yet (the user will create it later). Commits are local, author `b
   - E1 benign (all 4 arms x 3 models x 8/15/30/60 tools x 3 trials): complete.
   - E2 heists, undefended (all 4 arms x 3 models): complete.
   - E3 defenses, attack side (pin, prompt, gate on qwen2.5:3b and 7b, all 4 arms, 2 trials): complete.
-- **Not run yet: E3 benign side** (`--plan benign --defense pin prompt gate`, about 384 runs): the price of each defense in tasks completed. The site's Defense Shop shows "not run yet" for it. `bash scripts/resume.sh` skips every finished run and picks this up (it also re-checks the earlier phases, which are no-ops).
+- **E3 benign side: complete** (384 runs). All experiments planned in PLAN.md except attack 4 (rug-pull) are done: 4224 rows, 0 errors, 0 duplicates.
 - Rebuild tables with `.venv\Scripts\python analysis\summarize.py`, then `analysis\export_site.py` (writes `site/public/data/`, git-ignored).
-- Honest reading so far: almost no robberies in any arm (these models mostly do not obey the planted instructions); the code and docs arms barely complete the benign tasks on these small models (code 5%, docs 14% vs 73% for direct and MCP), so their "0% hijacked" is confounded by failing the task. Say so in the README and posts.
+- Honest reading: almost no robberies in any arm (these models mostly do not obey the planted instructions); the code and docs arms barely complete the benign tasks on these small models (code 5%, docs 14% vs 73% for direct and MCP), so their "0% hijacked" is confounded by failing the task. Say so in the README and posts.
 - Site: `site/` (Vite + React). Builds and renders; not deployed yet.
 
 ## Not done yet (in this order)

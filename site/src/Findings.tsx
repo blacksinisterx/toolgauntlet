@@ -36,9 +36,8 @@ export function Findings({ data }: { data: Data }) {
   const attacks = Object.keys(HEISTS);
   const [defArm, setDefArm] = useState('all');
   const defenseRows = Object.keys(DEFENSES).map((d) => {
-    const rows = s.e2.filter((r) => r.defense === d && (defArm === 'all' || r.arm === defArm));
-    const ben = s.defense_utility.filter((r) => r.defense === d && (defArm === 'all' || r.arm === defArm));
-    return { d, hij: pool(rows.map((r) => r.hijacked)), util: pool(ben.map((r) => r.utility)) };
+    const rows = s.defense_matched.filter((r) => r.defense === d && (defArm === 'all' || r.arm === defArm));
+    return { d, hij: pool(rows.map((r) => r.hijacked)), util: pool(rows.map((r) => r.utility)) };
   });
 
   return (
@@ -122,6 +121,7 @@ export function Findings({ data }: { data: Data }) {
             </div>
           ))}
         </div>
+        <p className="note">Like for like: qwen2.5 3B and 7B at 15 tools, the only runs every defense shares, with the undefended baseline restricted to the same runs. These two models were almost never robbed even without a defense, so there is little for a defense to prevent here. A 0% under a defense is not proof it works. What this section can say is the price: on these runs no defense cost a detectable share of normal tasks (the intervals overlap).</p>
       </section>
 
       <section className="card limits">

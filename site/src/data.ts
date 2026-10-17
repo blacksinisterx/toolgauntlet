@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export interface Rate { k: number; n: number; p: number | null; lo: number; hi: number }
 export interface E1Row { model: string; arm: string; n_tools: number; runs: number; utility: Rate; right_tools: Rate; lost_call: Rate; tokens_step1: number; seconds: number; tool_rtt_ms: number }
 export interface E2Row { defense: string; arm: string; attack: string; runs: number; not_applicable: number; hijacked: Rate; secret_read: Rate; utility: Rate }
-export interface Summary { counts: { rows: number; model_runs: number; not_applicable: number; errors: number }; e1: E1Row[]; e2: E2Row[]; e2_by_model: { defense: string; arm: string; model: string; hijacked: Rate }[]; defense_utility: { defense: string; arm: string; utility: Rate }[] }
+export interface Summary { counts: { rows: number; model_runs: number; not_applicable: number; errors: number }; e1: E1Row[]; e2: E2Row[]; e2_by_model: { defense: string; arm: string; model: string; hijacked: Rate }[]; defense_utility: { defense: string; arm: string; utility: Rate }[]; defense_matched: { defense: string; arm: string; hijacked: Rate; utility: Rate }[] }
 export interface Call { name: string; args: string; result: string; rtt_ms: number; blocked: boolean }
 export interface Step { wall: number; ptok: number; gtok: number; lost: boolean; calls: Call[] }
 export interface Run { id: string; arm: string; model: string; task: string; attack: string | null; variant: number; n: number; defense: string; trial: number; utility: boolean; hijacked: boolean; secret_read: boolean; blocked: number; lost_call: boolean; tools_called: string[]; prompt_tokens: number; gen_tokens: number; seconds: number; final: string; steps?: Step[] }
