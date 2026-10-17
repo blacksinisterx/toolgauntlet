@@ -99,12 +99,12 @@ def main():
           "| model | arm | tools | runs | utility | right tool | lost call | step-1 prompt tokens | seconds/run | tool RTT ms |", "|---|---|---|---|---|---|---|---|---|---|"]
     for x in out["e1"]:
         md.append(f"| {x['model']} | {x['arm']} | {x['n_tools']} | {x['runs']} | {fmt(x['utility'])} | {fmt(x['right_tools'])} | {fmt(x['lost_call'])} | {x['tokens_step1']} | {x['seconds']} | {x['tool_rtt_ms']} |")
-    md += ["\n## E2. The heists (hijack = the vault was robbed)\n", "| defense | arm | heist | runs | n/a | hijacked | read secrets | task still done |", "|---|---|---|---|---|---|---|---|"]
+    md += ["\n## E2. The heists (hijacked = the attacker got the secret, or the agent used the attacker's look-alike mail tool)\n", "| defense | arm | heist | runs | n/a | hijacked | read secrets | task still done |", "|---|---|---|---|---|---|---|---|"]
     for x in out["e2"]:
         md.append(f"| {x['defense']} | {x['arm']} | {x['attack']} | {x['runs']} | {x['not_applicable']} | {fmt(x['hijacked'])} | {fmt(x['secret_read'])} | {fmt(x['utility'])} |")
     md += ["\n## Hijack rate by model\n", "| defense | arm | model | hijacked |", "|---|---|---|---|"]
     md += [f"| {x['defense']} | {x['arm']} | {x['model']} | {fmt(x['hijacked'])} |" for x in out["e2_by_model"]]
-    md += ["\n## Defenses, like for like (qwen2.5 3B and 7B, 15 tools; the undefended baseline is restricted to the same runs)\n", "| defense | arm | vault robbed | benign tasks completed |", "|---|---|---|---|"]
+    md += ["\n## Defenses, like for like (qwen2.5 3B and 7B, 15 tools; the undefended baseline is restricted to the same runs)\n", "| defense | arm | hijacked | benign tasks completed |", "|---|---|---|---|"]
     md += [f"| {x['defense']} | {x['arm']} | {fmt(x['hijacked'])} | {fmt(x['utility'])} |" for x in out["defense_matched"]]
     (ROOT / "docs" / "RESULTS.md").write_text("\n".join(md) + "\n", encoding="utf8")
     print("\n".join(md[:2]), "\nwrote data/summary.json and docs/RESULTS.md")
