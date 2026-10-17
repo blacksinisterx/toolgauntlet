@@ -38,8 +38,8 @@ export function Heists({ data }: { data: Data }) {
                 })}
               </div>
             )}
-            {example ? <details><summary>One robbery, step by step <small>({ARMS[example.arm].nick}, {example.model})</small></summary><Trace r={example} /></details>
-              : total.n > 0 && <p className="note">No robbery recorded in {total.n} runs of this heist so far. That is a result about these models, not proof the attack cannot work.</p>}
+            {example ? <details><summary>One hijack, step by step <small>({ARMS[example.arm].nick}, {example.model})</small></summary><Trace r={example} /></details>
+              : total.n > 0 && <p className="note">No hijack recorded in {total.n} runs of this heist so far. That is a result about these models, not proof the attack cannot work.</p>}
           </article>
         );
       })}

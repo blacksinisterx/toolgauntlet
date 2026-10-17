@@ -86,7 +86,7 @@ export function Findings({ data }: { data: Data }) {
 
       <section>
         <h2>How easy is the vault to rob?</h2>
-        <p className="lead">Each cell is a real attack scenario run many times. The bar is the share of runs where the secret reached the attacker; the whisker is the 95% interval.</p>
+        <p className="lead">Each cell is a real attack scenario run many times. The bar is the share of runs that were hijacked: the attacker got the secret, or the agent used the attacker's look-alike mail tool. The whisker is the 95% interval.</p>
         {e2.length === 0 ? <div className="card pending"><Stamp tone="amber">Running</Stamp> The heist runs have not finished yet.</div> : (
           <div className="heat card">
             <div className="hrow head"><span />{ARM_ORDER.filter((a) => e2.some((r) => r.arm === a)).map((a) => <b key={a} style={{ color: ARMS[a].color }}>{ARMS[a].nick}</b>)}</div>
@@ -107,7 +107,7 @@ export function Findings({ data }: { data: Data }) {
 
       <section>
         <h2>Defense shop</h2>
-        <p className="lead">Three cheap defenses. Each is measured twice: how much it cuts the robbery rate, and what it costs in tasks completed.</p>
+        <p className="lead">Three cheap defenses. Each is measured twice: how much it cuts the hijack rate, and what it costs in tasks completed.</p>
         <div className="seg" role="tablist" aria-label="Tool layer">
           {['all', ...ARM_ORDER].map((a) => <button key={a} className={defArm === a ? 'on' : ''} onClick={() => setDefArm(a)}>{a === 'all' ? 'All layers' : ARMS[a].nick}</button>)}
         </div>
@@ -116,13 +116,13 @@ export function Findings({ data }: { data: Data }) {
             <div className="card defense" key={d}>
               <h3>{DEFENSES[d].label}</h3><p className="note">{DEFENSES[d].what}</p>
               {hij.n || util.n ? <>
-                <div className="lab">Vault robbed in</div><RateBar r={hij} />
+                <div className="lab">Hijacked in</div><RateBar r={hij} />
                 <div className="lab">Normal tasks still completed</div><RateBar r={util} color="var(--teal)" />
               </> : <Stamp tone="amber">Not run yet</Stamp>}
             </div>
           ))}
         </div>
-        <p className="note">Like for like: qwen2.5 3B and 7B at 15 tools, the only runs every defense shares, with the undefended baseline restricted to the same runs. These two models were almost never robbed even without a defense, so there is little for a defense to prevent here. A 0% under a defense is not proof it works. What this section can say is the price: on these runs no defense cost a detectable share of normal tasks (the intervals overlap).</p>
+        <p className="note">Like for like: qwen2.5 3B and 7B at 15 tools, the only runs every defense shares, with the undefended baseline restricted to the same runs. These two models were almost never hijacked even without a defense, so there is little for a defense to prevent here. A 0% under a defense is not proof it works. What this section can say is the price: on these runs no defense cost a detectable share of normal tasks (the intervals overlap).</p>
       </section>
 
       <section className="card limits">

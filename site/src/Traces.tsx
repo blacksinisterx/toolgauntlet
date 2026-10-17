@@ -26,7 +26,7 @@ export function Traces({ data }: { data: Data }) {
   return (
     <>
       <h1>Trace explorer</h1>
-      <p className="lead">Every measured run. Full step-by-step traces are kept for the replay groups and for every robbed vault; the rest show their summary.</p>
+      <p className="lead">Every measured run. Full step-by-step traces are kept for the replay groups and for every hijacked run; the rest show their summary.</p>
       <div className="controls">
         <select value={f.arm} onChange={set('arm')} aria-label="Tool layer"><option value="">All layers</option>{ARM_ORDER.map((a) => <option key={a} value={a}>{ARMS[a].nick}</option>)}</select>
         <select value={f.model} onChange={set('model')} aria-label="Model"><option value="">All models</option>{MODELS.map((m) => <option key={m}>{m}</option>)}</select>
@@ -44,7 +44,7 @@ export function Traces({ data }: { data: Data }) {
                 <td style={{ color: ARMS[r.arm].color }}><b>{ARMS[r.arm].nick}</b></td><td>{r.model}</td>
                 <td>{r.attack ? HEISTS[r.attack].title : r.task}{r.attack && <small> v{r.variant + 1}</small>}</td><td>{r.n}</td><td>{r.defense}</td>
                 <td>{r.prompt_tokens.toLocaleString()}</td><td>{r.seconds.toFixed(1)}s</td>
-                <td>{r.hijacked ? <Stamp tone="red">robbed</Stamp> : r.lost_call ? <Stamp tone="amber">call lost</Stamp> : r.utility ? <Stamp tone="teal">done</Stamp> : <Stamp tone="muted">failed</Stamp>}</td>
+                <td>{r.hijacked ? <Stamp tone="red">hijacked</Stamp> : r.lost_call ? <Stamp tone="amber">call lost</Stamp> : r.utility ? <Stamp tone="teal">done</Stamp> : <Stamp tone="muted">failed</Stamp>}</td>
               </tr>
             ))}
           </tbody>
@@ -63,7 +63,7 @@ export function Traces({ data }: { data: Data }) {
               ])}
               <li className="final"><span className="tag">answer</span>{sel.final || '(none)'}</li>
             </ol>
-          ) : <p>Tools called: {sel.tools_called.join(', ') || 'none'}.<br />Answer: {sel.final || '(none)'}<br /><small>Full steps are kept for replay groups and robbed vaults only.</small></p>}
+          ) : <p>Tools called: {sel.tools_called.join(', ') || 'none'}.<br />Answer: {sel.final || '(none)'}<br /><small>Full steps are kept for replay groups and hijacked runs only.</small></p>}
         </div>
       )}
     </>

@@ -53,7 +53,7 @@ class McpArm:
         self._tmp = tempfile.mkdtemp(prefix="gauntlet-")
         cfg_path, self.state_path = os.path.join(self._tmp, "scenario.json"), os.path.join(self._tmp, "state.json")
         with open(cfg_path, "w", encoding="utf8") as f:
-            json.dump({"seed": scn.seed, "specs": scn.specs, "web_patch": scn.attack.web_patch if scn.attack else {}}, f)
+            json.dump({"seed": scn.seed, "specs": scn.specs, "web_patch": scn.world.web}, f)   # the filled pages (payload substituted), not the attack's raw {P} template
         params = StdioServerParameters(command=sys.executable, args=["-m", "gauntlet.mcp_server"],
                                        env={**os.environ, "GAUNTLET_SCENARIO": cfg_path, "GAUNTLET_STATE": self.state_path})
         self._stack = AsyncExitStack()

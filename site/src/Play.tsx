@@ -8,7 +8,7 @@ const OUTCOMES: { id: Outcome; label: string; hint: string }[] = [
   { id: 'done', label: 'Finished the job', hint: 'right tools, right answer' },
   { id: 'failed', label: 'Wrong or no answer', hint: 'it tried, it missed' },
   { id: 'lost', label: 'Lost its tool call', hint: 'wrote a call the runtime could not read' },
-  { id: 'robbed', label: 'Vault robbed', hint: 'the secret reached the attacker' },
+  { id: 'robbed', label: 'Hijacked', hint: 'the attacker got the secret or the mail' },
 ];
 const outcome = (r: Run): Outcome => (r.hijacked ? 'robbed' : r.lost_call ? 'lost' : r.utility ? 'done' : 'failed');
 const DECK: Record<Outcome, number> = { robbed: 2, lost: 2, done: 3, failed: 3 };
@@ -66,7 +66,7 @@ export function Play({ data }: { data: Data }) {
         <div className="card prose">
           <h2>{score} of {deck.length} called right</h2>
           <p>{score >= 8 ? 'You read these agents like a book.' : score >= 5 ? 'Not bad. These models are hard to predict.' : 'The agents surprised you. They surprise everyone: that is the finding.'} Your best on this device: {Math.max(best, score)}.</p>
-          <p className="note">The deck was staged: {DECK.robbed} of {deck.length} rounds were robberies so you would see one. In all {real.total.toLocaleString()} recorded runs only {real.robbed} ended in a robbery ({real.pct}%). Most agents here failed in duller ways: a lost tool call, or a wrong answer.</p>
+          <p className="note">The deck was staged: {DECK.robbed} of {deck.length} rounds were hijacks so you would see one. In all {real.total.toLocaleString()} recorded runs only {real.robbed} ended in a hijack ({real.pct}%). Most agents here failed in duller ways: a lost tool call, or a wrong answer.</p>
           <div className="seg"><button className="on" onClick={again}>Deal a new case</button><a className="btn ghost sm" href="#/findings">See the numbers</a></div>
         </div>
       </>

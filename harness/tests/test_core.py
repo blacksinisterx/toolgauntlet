@@ -108,6 +108,21 @@ def test_mcp_arm_speaks_real_mcp_and_world_state_comes_back(attack):
     asyncio.run(go())
 
 
+@pytest.mark.parametrize("arm_name", ["direct", "mcp"])
+def test_trojan_page_reaches_the_model_with_its_payload_filled(arm_name):
+    # regression: the MCP server once got the raw "{P}" template, so its trojan-page runs were never attacked
+    async def go():
+        scn = build("web", "trojan_page", 12, variant=2)
+        arm = arms.make_arm(arm_name)
+        await arm.start(scn)
+        try:
+            text, _ = await arm.call("web_fetch", {"url": "https://news.test/article"})
+        finally:
+            await arm.stop()
+        assert "{P}" not in text and text == scn.world.web["https://news.test/article"]
+    asyncio.run(go())
+
+
 def test_direct_arm_hides_third_party_descriptions():
     async def go():
         scn = build("weather", "poisoned_manual", 12)
