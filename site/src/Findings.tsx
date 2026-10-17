@@ -51,6 +51,7 @@ export function Findings({ data }: { data: Data }) {
             <span><b>{s.counts.model_runs.toLocaleString()}</b> measured runs</span><span><b>3</b> local models</span>
             <span><b>{armsHere.length}</b> tool layers so far</span><span><b>{s.counts.errors}</b> crashed runs</span>
           </div>
+          <p style={{ margin: '14px 0 0' }}><a className="btn sm" href="#/play">Play: call the outcome</a></p>
         </div>
         <aside className="board" aria-hidden="true">
           {ARM_ORDER.map((a, i) => <div key={a} className="pin" style={{ ['--r' as string]: `${[-3, 2, -1.5, 3][i]}deg` }}><i style={{ background: ARMS[a].color }} /><b>{ARMS[a].nick}</b><small>{ARMS[a].label}</small></div>)}

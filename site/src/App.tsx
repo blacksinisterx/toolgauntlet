@@ -5,8 +5,9 @@ import { Arena } from './Arena';
 import { Heists } from './Heists';
 import { Traces } from './Traces';
 import { Method } from './Method';
+import { Play } from './Play';
 
-const TABS = [['findings', 'Findings'], ['arena', 'Arena'], ['heists', 'The Heists'], ['traces', 'Traces'], ['method', 'Method']] as const;
+const TABS = [['findings', 'Findings'], ['arena', 'Arena'], ['play', 'Play'], ['heists', 'The Heists'], ['traces', 'Traces'], ['method', 'Method']] as const;
 const route = () => (location.hash.replace(/^#\/?/, '') || 'findings');
 
 export default function App() {
@@ -26,7 +27,7 @@ export default function App() {
       <main>
         {error && <div className="card pending">{error}</div>}
         {!data && !error && <div className="card pending">Opening the case file…</div>}
-        {data && (r === 'arena' ? <Arena data={data} /> : r === 'heists' ? <Heists data={data} /> : r === 'traces' ? <Traces data={data} /> : r === 'method' ? <Method data={data} /> : <Findings data={data} />)}
+        {data && (r === 'arena' ? <Arena data={data} /> : r === 'play' ? <Play data={data} /> : r === 'heists' ? <Heists data={data} /> : r === 'traces' ? <Traces data={data} /> : r === 'method' ? <Method data={data} /> : <Findings data={data} />)}
       </main>
       <footer>
         <span>A measured comparison on three small local models. No claim about any other model. Every number comes from <a href="/data/runs.jsonl">runs.jsonl</a>.</span>
