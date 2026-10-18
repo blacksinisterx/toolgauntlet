@@ -82,8 +82,8 @@ def main():
         if not r.get("attack"):
             cost[(r.get("defense", "none"), r["arm"])].append(r)
     out["defense_utility"] = [{"defense": d, "arm": a, "utility": rate(g, "utility")} for (d, a), g in sorted(cost.items())]
-    # fair defense comparison: only the models and tool count every defense was run on (the undefended baseline has more of both)
-    fair = lambda r: r["model"] in ("qwen2.5:3b", "qwen2.5:7b") and r["n_tools"] == 15
+    # fair defense comparison: only the tool count and the first two trials every defense was run on (the undefended baseline has more)
+    fair = lambda r: r["n_tools"] == 15 and r["trial"] < 2
     dm = defaultdict(lambda: {"atk": [], "ben": []})
     for r in runs:
         if fair(r):
@@ -104,7 +104,7 @@ def main():
         md.append(f"| {x['defense']} | {x['arm']} | {x['attack']} | {x['runs']} | {x['not_applicable']} | {fmt(x['hijacked'])} | {fmt(x['secret_read'])} | {fmt(x['utility'])} |")
     md += ["\n## Hijack rate by model\n", "| defense | arm | model | hijacked |", "|---|---|---|---|"]
     md += [f"| {x['defense']} | {x['arm']} | {x['model']} | {fmt(x['hijacked'])} |" for x in out["e2_by_model"]]
-    md += ["\n## Defenses, like for like (qwen2.5 3B and 7B, 15 tools; the undefended baseline is restricted to the same runs)\n", "| defense | arm | hijacked | benign tasks completed |", "|---|---|---|---|"]
+    md += ["\n## Defenses, like for like (15 tools, trials 0 and 1; the undefended baseline is restricted to the same runs)\n", "| defense | arm | hijacked | benign tasks completed |", "|---|---|---|---|"]
     md += [f"| {x['defense']} | {x['arm']} | {fmt(x['hijacked'])} | {fmt(x['utility'])} |" for x in out["defense_matched"]]
     (ROOT / "docs" / "RESULTS.md").write_text("\n".join(md) + "\n", encoding="utf8")
     print("\n".join(md[:2]), "\nwrote data/summary.json and docs/RESULTS.md")

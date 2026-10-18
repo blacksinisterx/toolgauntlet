@@ -15,7 +15,15 @@ Five attacks ("heists") try to make the agent leak the key or mail the attacker:
 
 The site has the findings, a replay Arena, a "Call It" prediction game played on real runs, the heists, a trace explorer for every run, and the method.
 
-## Findings (3 local models, 3,636 measured runs)
+## See it
+
+![Arena: the same scenario through the tool layers on one clock](docs/media/toolgauntlet-arena.gif)
+
+![A recorded hijack, step by step](docs/media/toolgauntlet-heist.gif)
+
+![Defense Shop: what each defense costs and buys](docs/media/toolgauntlet-defense.gif)
+
+## Findings (3 local models, 4,428 measured runs)
 
 All numbers come from [`data/runs.jsonl`](data/runs.jsonl) (one line per run) and are rebuilt into [`docs/RESULTS.md`](docs/RESULTS.md). Rates show the 95% Wilson interval where it matters.
 
@@ -23,9 +31,9 @@ All numbers come from [`data/runs.jsonl`](data/runs.jsonl) (one line per run) an
 - **Tool schemas cost about 48 tokens each.** On qwen2.5:7b the first call grows from 600 tokens at 8 tools to 3,121 at 60. The code layer stays flat at 335 tokens whatever the tool count.
 - **"Just give it the API docs" collapses as the API grows.** The docs layer completed 33% (24/72) of everyday tasks at 8 tools and 1% (1/72) at 60. 72% (206/288) of its runs ended in a tool call the runtime could not parse.
 - **The code layer barely worked on these models**: 5% (15/288) of everyday tasks, 30% (86/288) of runs lost the tool call. That is a statement about 3B to 8B models writing code inside a JSON argument, not about code execution in general.
-- **Hijacks were rare: 10 of 3,636 runs (0.3%).** Four leaked the secret (all hermes3:8b, all via the trojan page, 2 of 12 runs for direct and 2 of 12 for MCP). Six were the model picking the attacker's look-alike mail tool without reading the secret. hermes3 read the secrets file after the trojan page in 8 of 12 direct and 8 of 12 MCP runs; the Qwen models did so in 0 to 2 of 12; the code and docs layers in 0 of 36 each, but they hardly finish a task at all, so that zero says little.
-- **Hard-coded tools are not exposed to description attacks.** Three of the five heists live in third-party tool descriptions. A developer-written direct layer never receives them, so those 588 scenarios are recorded as "not exposed" and cost no model call. The trojan page reaches every layer.
-- **The defenses could not be shown to help or hurt.** They were run on qwen2.5 3B and 7B at 15 tools, where the undefended hijack rate was already about 1% for MCP (2/192) and 0% elsewhere. Under defense it stayed 0 to 1%. On normal tasks none cost a detectable share (direct 81% undefended against 72 to 81% with a defense; MCP 77% against 75 to 81%). The defenses were **not** run on hermes3, the only model that leaked the secret.
+- **Hijacks were rare: 16 of 4,428 runs (0.4%).** Eight leaked the secret, all of them hermes3:8b on the trojan page (2 of 8 runs under direct calling and 2 of 8 under MCP, with and without pinning). The other eight were the model picking the attacker's look-alike mail tool without reading the secret. hermes3 read the secrets file after the trojan page in 8 of 8 undefended direct runs and 8 of 8 MCP runs at 15 tools; the Qwen models in 0 to 2 of 12; the code and docs layers never, but they hardly finish a task at all, so that zero says little.
+- **Hard-coded tools are not exposed to description attacks.** Three of the five heists live in third-party tool descriptions. A developer-written direct layer never receives them, so those 756 scenarios are recorded as "not exposed" and cost no model call. The trojan page reaches every layer.
+- **Defenses, on the one model that leaked (hermes3, trojan page, 8 runs per cell):** the untrusted-text prompt cut secret-file reads from 8 of 8 to 0 of 8 under both direct and MCP, and no leak; the sink gate left the reads alone (8 of 8) but stopped every leak and blocked 5 sends, and in those runs only 4 of 8 tasks finished; pinning descriptions changed nothing (2 of 8 leaked, as undefended), because this attack arrives in a tool result, not a description. Against the look-alike mail tool nothing separated the cells (1 of 8 undefended, 0 pinned, 1 each with the prompt and the gate). On the Qwen models the undefended hijack rate was already about 0 to 1%, so there was nothing for a defense to prevent. On everyday tasks no defense cost a detectable share (hermes3 direct and MCP: 11 of 16 undefended, 10 to 11 of 16 defended).
 
 ## What this cannot say
 

@@ -6,7 +6,7 @@ Short on purpose. Pick one, post it, post the next a few days later.
 
 "MCP is dead, just use the API." Someone told me that. It's a claim, not a benchmark, so I built one.
 
-I ran 3,636 agent runs on local models (qwen2.5 3B and 7B, hermes3 8B). Same tasks, same tools, four ways of handing them to the model.
+I ran 4,428 agent runs on local models (qwen2.5 3B and 7B, hermes3 8B). Same tasks, same tools, four ways of handing them to the model.
 
 MCP vs plain function calling: the model reads the same thing (prompts differed by at most 0.6 tokens) and finishes the same share of everyday tasks, 73% vs 73%, from 8 up to 60 tools. MCP's cost is a protocol hop: 5.7 ms per tool call against under 1 ms.
 
@@ -30,11 +30,13 @@ https://toolgauntlet.vercel.app
 
 ## Post 3: Prompt injection
 
-I fired 5 kinds of prompt-injection attacks at AI agents built 4 different ways (3 small local models, 3,636 runs).
+I fired 5 kinds of prompt-injection attacks at AI agents built 4 different ways (3 small local models, 4,428 runs).
 
-Hijacked: 10 runs. About 0.3%.
-Only 4 actually leaked the secret, all from one model (hermes3 8B) reading a poisoned web page. It read the secrets file in 8 of 12 runs, under direct calling and under MCP alike.
-The other 6 picked an attacker's look-alike "send_mail" tool.
+Hijacked: 16 runs. About 0.4%.
+Only 8 actually leaked the secret, all from one model (hermes3 8B) reading a poisoned web page. It read the secrets file in 8 of 8 runs, under direct calling and under MCP alike.
+The other 8 picked an attacker's look-alike "send_mail" tool.
+
+Then I tried defenses on that one model. A "treat tool text as untrusted" prompt took secret-file reads from 8 of 8 to 0 of 8. A gate on the send tool stopped every leak but not the reading. Pinning tool descriptions did nothing, because the attack came in a tool result, not a description.
 
 One thing I did not expect: the model mattered much more than the layer. Direct and MCP looked the same for the same model.
 

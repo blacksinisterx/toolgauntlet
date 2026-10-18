@@ -123,7 +123,7 @@ export function Findings({ data }: { data: Data }) {
             </div>
           ))}
         </div>
-        <p className="note">Like for like: qwen2.5 3B and 7B at 15 tools, the only runs every defense shares, with the undefended baseline restricted to the same runs. These two models were almost never hijacked even without a defense, so there is little for a defense to prevent here. A 0% under a defense is not proof it works. What this section can say is the price: on these runs no defense cost a detectable share of normal tasks (the intervals overlap).</p>
+        <p className="note">Like for like: all three models at 15 tools and the first two trials, the runs every defense shares, with the undefended baseline restricted to the same runs. Most cells were almost never hijacked even undefended, so a 0% under a defense is not proof it works. The informative case is hermes3, the one model that leaked the secret. On the trojan page the untrusted-text prompt cut secret-file reads from 8 of 8 runs to 0 of 8; the sink gate let it read the file but stopped the leak (and cost half the tasks in those runs); pinning descriptions did nothing, because that attack arrives in a tool result, not a description. Those cells hold only 8 runs, so only a swing like 8 to 0 is more than noise. On normal tasks no defense cost a detectable share.</p>
       </section>
 
       <section className="card limits">

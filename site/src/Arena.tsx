@@ -63,7 +63,7 @@ export function Arena({ data }: { data: Data }) {
         {lines.map(({ r, evs, total }) => {
           const done = now >= total, shown = evs.filter((e) => e.t <= now);
           const tok = shown.reduce((a, e) => a + (e.ptok ?? 0), 0);
-          const verdict = r.hijacked ? ['ROBBED', 'red'] as const : r.utility ? ['DONE', 'teal'] as const : ['FAILED', 'amber'] as const;
+          const verdict = r.hijacked ? ['HIJACKED', 'red'] as const : r.utility ? ['DONE', 'teal'] as const : ['FAILED', 'amber'] as const;
           return (
             <div className="lane card" key={r.id} style={{ ['--arm' as string]: ARMS[r.arm].color }}>
               <header><b>{ARMS[r.arm].nick}</b><small>{ARMS[r.arm].label}</small></header>

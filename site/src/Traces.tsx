@@ -32,7 +32,7 @@ export function Traces({ data }: { data: Data }) {
         <select value={f.model} onChange={set('model')} aria-label="Model"><option value="">All models</option>{MODELS.map((m) => <option key={m}>{m}</option>)}</select>
         <select value={f.attack} onChange={set('attack')} aria-label="Scenario"><option value="">All scenarios</option><option value="benign">Everyday tasks</option>{Object.entries(HEISTS).map(([k, h]) => <option key={k} value={k}>{h.title}</option>)}</select>
         <select value={f.defense} onChange={set('defense')} aria-label="Defense"><option value="">Any defense</option>{Object.entries(DEFENSES).map(([k, d]) => <option key={k} value={k}>{d.label}</option>)}</select>
-        <select value={f.outcome} onChange={set('outcome')} aria-label="Outcome"><option value="">Any outcome</option><option value="done">Task done</option><option value="failed">Task failed</option><option value="robbed">Vault robbed</option><option value="lost">Tool call lost</option></select>
+        <select value={f.outcome} onChange={set('outcome')} aria-label="Outcome"><option value="">Any outcome</option><option value="done">Task done</option><option value="failed">Task failed</option><option value="robbed">Hijacked</option><option value="lost">Tool call lost</option></select>
       </div>
       <p className="note">{rows.length.toLocaleString()} runs match. {data.traces.not_applicable} further attack scenarios were recorded as not exposed (no model call spent).</p>
       <div className="card table-wrap">
