@@ -12,7 +12,7 @@ MCP vs plain function calling: the model reads the same thing (prompts differed 
 
 "Just use the API" (one HTTP tool plus the docs): 33% of tasks at 8 tools, 1% at 60.
 
-So not dead, at least not on these models. 3B to 8B only, nothing here speaks for GPT or Claude. Data and an interactive site: https://toolgauntlet.vercel.app
+So the "MCP costs you tokens and accuracy" argument doesn't hold up here. Whether MCP is worth it is about reuse and ecosystem, which I did not measure. 3B to 8B only, nothing here speaks for GPT or Claude. Data and an interactive site: https://toolgauntlet.vercel.app
 
 ## Post 2: "Just give the agent the API docs"
 
